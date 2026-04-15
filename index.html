@@ -1,0 +1,2147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SQL para Iniciantes — Roadmap interativo premium em glassmorphism com conteúdo aprofundado">
+  <title>SQL Roadmap — Glass Edition</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+
+    :root {
+      --term-text: #c8d0e0;
+      --term-white: #eaf0ff;
+      --term-dim: #a0a8c0;
+      --term-green: #80dea6;
+      --term-cyan: #88d8e8;
+      --term-yellow: #e8cc80;
+      --term-orange: #ebb070;
+      --term-red: #e88090;
+      --term-purple: #bca8f0;
+      --term-blue: #88b8f0;
+      --btn-close: #ff6b6b;
+      --btn-minimize: #ffd93d;
+      --btn-maximize: #6bcb77;
+      --accent: #88d8e8;
+      --accent-purple: #bca8f0;
+      --radius: 20px;
+      --radius-sm: 14px;
+      --radius-xs: 10px;
+      --gw: 255, 255, 255;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
+
+    body {
+      font-family: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 28px; overflow-x: hidden;
+      color: var(--term-text);
+      background: #1e2132;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 120% 80% at 8% 12%, rgba(75, 85, 140, 0.50) 0%, transparent 55%),
+        radial-gradient(ellipse 100% 70% at 92% 82%, rgba(140, 95, 128, 0.38) 0%, transparent 55%),
+        radial-gradient(ellipse 80% 60% at 48% 8%, rgba(85, 135, 155, 0.32) 0%, transparent 48%),
+        radial-gradient(ellipse 70% 55% at 78% 22%, rgba(165, 125, 145, 0.22) 0%, transparent 48%),
+        radial-gradient(ellipse 60% 80% at 25% 92%, rgba(105, 88, 138, 0.28) 0%, transparent 52%),
+        radial-gradient(ellipse 50% 45% at 58% 55%, rgba(145, 125, 108, 0.12) 0%, transparent 42%);
+      pointer-events: none; z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(circle 280px at 15% 28%, rgba(136, 216, 232, 0.04) 0%, transparent 100%),
+        radial-gradient(circle 380px at 82% 62%, rgba(188, 168, 240, 0.035) 0%, transparent 100%),
+        radial-gradient(circle 220px at 52% 88%, rgba(128, 222, 166, 0.03) 0%, transparent 100%);
+      pointer-events: none; z-index: 0;
+      animation: orbDrift 24s ease-in-out infinite alternate;
+    }
+
+    @keyframes orbDrift {
+      0% { transform: translate(0, 0); }
+      33% { transform: translate(14px, -20px); }
+      66% { transform: translate(-10px, 14px); }
+      100% { transform: translate(5px, -8px); }
+    }
+
+    .macos-window {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 980px;
+      background: rgba(var(--gw), 0.04);
+      backdrop-filter: blur(40px) saturate(1.3);
+      -webkit-backdrop-filter: blur(40px) saturate(1.3);
+      border-radius: var(--radius);
+      border: 1px solid rgba(var(--gw), 0.10);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      overflow: hidden;
+      animation: windowReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .macos-window::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 150px;
+      background: linear-gradient(180deg, rgba(var(--gw), 0.06) 0%, rgba(var(--gw), 0.02) 35%, transparent 100%);
+      pointer-events: none; z-index: 10;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    @keyframes windowReveal {
+      from { opacity: 0; transform: scale(0.92) translateY(28px); filter: blur(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+    }
+
+    .titlebar {
+      display: flex; align-items: center;
+      height: 44px; padding: 0 16px;
+      background: rgba(var(--gw), 0.025);
+      border-bottom: 1px solid rgba(var(--gw), 0.06);
+      user-select: none; position: relative; z-index: 11;
+    }
+
+    .traffic-lights { display: flex; align-items: center; gap: 7px; z-index: 2; }
+    .tl-btn {
+      width: 11px; height: 11px; border-radius: 50%; border: none;
+      cursor: default; position: relative; transition: transform 0.25s ease, filter 0.25s ease;
+    }
+    .tl-btn:hover { filter: brightness(1.25); transform: scale(1.15); }
+    .tl-close { background: var(--btn-close); box-shadow: 0 0 5px rgba(255,107,107,0.25); }
+    .tl-minimize { background: var(--btn-minimize); box-shadow: 0 0 5px rgba(255,217,61,0.25); }
+    .tl-maximize { background: var(--btn-maximize); box-shadow: 0 0 5px rgba(107,203,119,0.25); }
+
+    .titlebar-text {
+      position: absolute; left: 50%; transform: translateX(-50%);
+      font-size: 11px; font-weight: 500; color: rgba(var(--gw), 0.30);
+      letter-spacing: 0.04em; font-family: 'Inter', sans-serif;
+    }
+
+    .tabs-bar {
+      display: flex;
+      background: rgba(var(--gw), 0.015);
+      border-bottom: 1px solid rgba(var(--gw), 0.05);
+      overflow-x: auto; scrollbar-width: none;
+      position: relative; z-index: 11;
+    }
+    .tabs-bar::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      padding: 11px 22px; font-size: 11px; font-weight: 500;
+      color: var(--term-dim); background: transparent;
+      border: none; cursor: pointer; transition: color 0.3s ease, background-color 0.3s ease;
+      font-family: 'Inter', sans-serif; white-space: nowrap;
+      position: relative; letter-spacing: 0.04em;
+    }
+    .tab-btn:hover { color: var(--term-text); background: rgba(var(--gw), 0.03); }
+    .tab-btn.active { color: var(--accent); background: rgba(var(--gw), 0.04); font-weight: 600; }
+    .tab-btn.active::after {
+      content: ''; position: absolute; bottom: 0; left: 16px; right: 16px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-purple));
+      border-radius: 2px 2px 0 0;
+      box-shadow: 0 0 10px rgba(136,216,232,0.22);
+    }
+
+    .terminal-body {
+      background: rgba(var(--gw), 0.01);
+      min-height: 640px; font-size: 12.5px;
+      line-height: 1.65; padding: 0; position: relative;
+    }
+
+    .panel { display: none; padding: 26px 30px; animation: panelSlide 0.4s ease; }
+    .panel.active { display: block; }
+    @keyframes panelSlide {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .prompt-symbol { color: var(--accent); font-weight: 600; }
+    .t-white { color: var(--term-white); }
+    .t-dim { color: var(--term-dim); }
+    .t-cyan { color: var(--term-cyan); }
+    .t-green { color: var(--term-green); }
+    .t-orange { color: var(--term-orange); }
+    .t-purple { color: var(--term-purple); }
+    .t-yellow { color: var(--term-yellow); }
+
+    .cursor {
+      display: inline-block; width: 7px; height: 15px;
+      background: var(--accent); vertical-align: text-bottom;
+      animation: cursorBlink 1.1s step-end infinite;
+      margin-left: 2px; border-radius: 1px; opacity: 0.8;
+      box-shadow: 0 0 6px rgba(136,216,232,0.3);
+    }
+    @keyframes cursorBlink { 0%,100%{opacity:.8} 50%{opacity:0} }
+
+    .term-line { margin-bottom: 2px; word-break: break-word; }
+    .term-line.mt { margin-top: 14px; }
+
+    .output-header {
+      color: var(--term-white); font-weight: 600; font-size: 13px;
+      margin: 22px 0 14px; padding-bottom: 7px;
+      border-bottom: 1px solid rgba(var(--gw), 0.05);
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .hero-shell,
+    .module-card,
+    .roadmap-item,
+    .info-block,
+    .stats-card,
+    .practice-card,
+    .case-hero,
+    .case-nav-card,
+    .case-study,
+    .case-block,
+    .concept-pill {
+      background: transparent;
+      border: 1px solid rgba(var(--gw), 0.08);
+      border-radius: var(--radius-sm);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-shell::before,
+    .module-card::before,
+    .roadmap-item::before,
+    .info-block::before,
+    .stats-card::before,
+    .practice-card::before,
+    .case-hero::before,
+    .case-nav-card::before,
+    .case-study::before,
+    .case-block::before,
+    .concept-pill::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 50%;
+      border-radius: inherit;
+      background: linear-gradient(180deg, rgba(var(--gw), 0.07) 0%, rgba(var(--gw), 0.025) 30%, transparent 100%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .hero-shell {
+      padding: 20px 22px;
+      margin-bottom: 16px;
+      border-radius: var(--radius);
+    }
+
+    .hero-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(1.45rem, 3vw, 2.2rem);
+      color: var(--term-white);
+      line-height: 1.1;
+      margin: 10px 0 8px;
+    }
+
+    .hero-subtitle {
+      color: var(--term-dim);
+      font-size: 11.5px;
+      line-height: 1.7;
+      max-width: 760px;
+    }
+
+    .pills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      border: 1px solid rgba(var(--gw), 0.10);
+      background: rgba(var(--gw), 0.03);
+    }
+    .pill.blue { color: var(--term-blue); }
+    .pill.green { color: var(--term-green); }
+    .pill.orange { color: var(--term-orange); }
+    .pill.purple { color: var(--term-purple); }
+
+    .module-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .module-card {
+      padding: 14px 16px 16px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .module-card:hover,
+    .roadmap-item:hover,
+    .info-block:hover,
+    .stats-card:hover,
+    .practice-card:hover,
+    .case-nav-card:hover,
+    .case-study:hover,
+    .case-block:hover,
+    .concept-pill:hover {
+      border-color: rgba(var(--gw), 0.16);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    }
+
+    .module-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .module-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .module-index {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      border: 1px solid rgba(var(--gw), 0.14);
+      background: rgba(var(--gw), 0.04);
+      color: var(--term-white);
+      flex-shrink: 0;
+    }
+
+    .module-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--term-white);
+    }
+
+    .module-desc {
+      color: var(--term-dim);
+      font-size: 10.5px;
+      margin-top: 3px;
+    }
+
+    .roadmap-list {
+      list-style: none; margin: 0;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+
+    .roadmap-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease;
+      transform: translateZ(0);
+      will-change: transform;
+    }
+
+    .roadmap-item:hover { transform: translateZ(0) translateY(-1px); }
+
+    .roadmap-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 38px; height: 38px; border-radius: var(--radius-xs);
+      flex-shrink: 0; position: relative; z-index: 1;
+      background: rgba(136, 216, 232, 0.08);
+      border: 1px solid rgba(136, 216, 232, 0.25);
+      transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 12px rgba(136, 216, 232, 0.25), 0 0 30px rgba(136, 216, 232, 0.12), inset 0 0 14px rgba(136, 216, 232, 0.15);
+    }
+
+    .roadmap-icon svg {
+      width: 18px; height: 18px; stroke: var(--accent);
+      fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+      filter: drop-shadow(0 0 6px rgba(136,216,232,0.5)) drop-shadow(0 0 14px rgba(136,216,232,0.3));
+    }
+
+    .roadmap-item.completed .roadmap-icon {
+      background: rgba(128,222,166,0.10);
+      border-color: rgba(128,222,166,0.30);
+      box-shadow: 0 0 12px rgba(128,222,166,0.25), 0 0 30px rgba(128,222,166,0.12), inset 0 0 14px rgba(128,222,166,0.15);
+    }
+    .roadmap-item.completed .roadmap-icon svg {
+      stroke: var(--term-green);
+      filter: drop-shadow(0 0 6px rgba(128,222,166,0.5)) drop-shadow(0 0 14px rgba(128,222,166,0.3));
+    }
+
+    .roadmap-content { flex: 1; position: relative; z-index: 1; }
+
+    .roadmap-name {
+      color: var(--term-white); font-weight: 600; font-size: 12.5px;
+      letter-spacing: 0.02em;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .roadmap-item.completed .roadmap-name { color: var(--term-green); }
+
+    .roadmap-badge {
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(var(--gw), 0.10);
+      background: rgba(var(--gw), 0.03);
+      color: var(--term-dim);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .roadmap-desc {
+      color: var(--term-dim); font-size: 10.5px; margin-top: 3px; line-height: 1.6;
+    }
+
+    .roadmap-detail,
+    .case-study-detail {
+      overflow: hidden;
+      transform: scaleY(0);
+      transform-origin: top;
+      opacity: 0;
+      height: 0;
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease;
+      will-change: transform, opacity;
+    }
+
+    .roadmap-detail.open,
+    .case-study-detail.open {
+      transform: scaleY(1);
+      opacity: 1;
+      height: auto;
+      margin-top: 14px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .detail-card {
+      background: rgba(var(--gw), 0.02);
+      border: 1px solid rgba(var(--gw), 0.05);
+      border-radius: var(--radius-xs);
+      padding: 12px 14px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+    }
+
+    .detail-label {
+      color: var(--accent); font-weight: 600; font-size: 10px;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin: 0 0 8px; display: block;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .detail-text,
+    .detail-list li {
+      color: var(--term-white); font-size: 12px; line-height: 1.72;
+    }
+
+    .detail-text strong,
+    .detail-list strong {
+      color: var(--term-cyan);
+      font-weight: 600;
+    }
+
+    .detail-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .detail-list li::before {
+      content: '▸ ';
+      color: var(--term-green);
+    }
+
+    .detail-code,
+    .case-query {
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(var(--gw), 0.05);
+      border-radius: var(--radius-xs);
+      padding: 10px 14px;
+      font-size: 11.5px;
+      line-height: 1.7;
+      overflow-x: auto;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      margin-bottom: 10px;
+    }
+
+    .tip-box,
+    .warning-box,
+    .result-box {
+      border-radius: var(--radius-xs);
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(var(--gw), 0.08);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .tip-box {
+      background: rgba(136,216,232,0.08);
+      color: var(--term-white);
+    }
+
+    .warning-box {
+      background: rgba(232, 128, 144, 0.08);
+      color: var(--term-white);
+    }
+
+    .result-box {
+      background: rgba(128,222,166,0.08);
+      color: var(--term-white);
+    }
+
+    .study-check {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px; border: 1px solid rgba(var(--gw), 0.12);
+      background: rgba(var(--gw), 0.03);
+      color: var(--term-dim); font-size: 10.5px; font-weight: 600;
+      font-family: 'Inter', sans-serif; letter-spacing: 0.03em;
+      cursor: pointer; user-select: none;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      transform: translateZ(0);
+      position: relative; z-index: 2;
+      text-decoration: none;
+    }
+
+    .study-check:hover {
+      transform: translateZ(0) scale(1.02);
+      border-color: rgba(var(--gw), 0.18);
+      box-shadow: 0 0 12px rgba(136,216,232,0.08);
+    }
+
+    .study-check .check-box {
+      width: 14px; height: 14px; border-radius: 4px;
+      border: 1.5px solid rgba(var(--gw), 0.20);
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .study-check .check-box svg {
+      width: 10px; height: 10px; stroke: transparent;
+      fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+      transition: stroke 0.2s ease;
+    }
+
+    .study-check.checked {
+      border-color: rgba(128,222,166,0.30);
+      color: var(--term-green);
+      box-shadow: 0 0 14px rgba(128,222,166,0.06);
+    }
+
+    .study-check.checked .check-box {
+      background: rgba(128,222,166,0.15);
+      border-color: rgba(128,222,166,0.40);
+    }
+
+    .study-check.checked .check-box svg {
+      stroke: var(--term-green);
+    }
+
+    .kw { color: var(--term-purple); font-weight: 600; }
+    .fn { color: var(--term-cyan); }
+    .str { color: var(--term-green); }
+    .num { color: var(--term-orange); }
+    .cm { color: #565e70; font-style: italic; }
+    .op { color: var(--term-red); }
+    .tbl { color: var(--term-yellow); }
+    .col { color: var(--term-white); }
+
+    .explain-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .practice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .practice-card,
+    .info-block {
+      padding: 16px 18px;
+      margin-bottom: 10px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      transform: translateZ(0);
+    }
+
+    .info-block h4,
+    .practice-card h4,
+    .case-block h4 {
+      font-size: 12px; font-weight: 600; color: var(--term-white);
+      margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
+      font-family: 'Inter', sans-serif;
+      position: relative; z-index: 1;
+    }
+
+    .info-block p,
+    .info-block li,
+    .practice-card p,
+    .practice-card li,
+    .case-block p,
+    .case-block li {
+      font-size: 11.5px; color: var(--term-white); line-height: 1.65; position: relative; z-index: 1;
+    }
+
+    .info-block ul,
+    .practice-card ul,
+    .case-block ul {
+      list-style: none; margin-top: 6px; position: relative; z-index: 1;
+    }
+
+    .info-block li,
+    .practice-card li,
+    .case-block li { padding: 2px 0; }
+
+    .info-block li::before,
+    .practice-card li::before,
+    .case-block li::before { content: '▸ '; color: var(--term-green); }
+
+    .case-hero {
+      padding: 20px 22px;
+      margin-bottom: 16px;
+      border-radius: var(--radius);
+    }
+
+    .case-hero-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      position: relative;
+      z-index: 1;
+    }
+
+    .case-hero-copy {
+      flex: 1;
+    }
+
+    .case-hero-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--term-cyan);
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+
+    .case-hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .case-hero-stat {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      border: 1px solid rgba(var(--gw), 0.10);
+      background: rgba(var(--gw), 0.03);
+      color: var(--term-dim);
+    }
+
+    .case-layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .case-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: sticky;
+      top: 16px;
+    }
+
+    .case-nav-card {
+      padding: 14px 14px 12px;
+      cursor: pointer;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .case-nav-card.active {
+      border-color: rgba(136,216,232,0.22);
+      box-shadow: 0 0 18px rgba(136,216,232,0.08);
+      transform: translateY(-1px);
+    }
+
+    .case-nav-index {
+      font-size: 10px;
+      color: var(--term-cyan);
+      font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .case-nav-title {
+      color: var(--term-white);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.45;
+      margin-bottom: 4px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .case-nav-desc {
+      color: var(--term-dim);
+      font-size: 10.5px;
+      line-height: 1.55;
+      position: relative;
+      z-index: 1;
+    }
+
+    .case-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .case-study {
+      padding: 16px 18px 18px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .case-study-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .case-study-left {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .case-study-index {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      color: var(--term-white);
+      background: rgba(var(--gw), 0.04);
+      border: 1px solid rgba(var(--gw), 0.12);
+      flex-shrink: 0;
+    }
+
+    .case-study-title {
+      font-size: 15px;
+      line-height: 1.35;
+      color: var(--term-white);
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+    }
+
+    .case-study-subtitle {
+      color: var(--term-dim);
+      font-size: 11px;
+      margin-top: 4px;
+      line-height: 1.6;
+    }
+
+    .case-study-tag {
+      flex-shrink: 0;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      border: 1px solid rgba(var(--gw), 0.10);
+      background: rgba(var(--gw), 0.03);
+      color: var(--term-cyan);
+    }
+
+    .case-study-toggle {
+      margin-top: 14px;
+    }
+
+    .case-study-detail.open {
+      padding-top: 2px;
+    }
+
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .case-block {
+      padding: 14px 15px;
+    }
+
+    .case-block-full {
+      grid-column: 1 / -1;
+    }
+
+    .case-query-wrap {
+      margin-bottom: 12px;
+    }
+
+    .case-query-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      background: rgba(var(--gw), 0.03);
+      border: 1px solid rgba(var(--gw), 0.05);
+      border-bottom: none;
+      border-radius: 10px 10px 0 0;
+      font-size: 10px;
+      color: var(--term-dim);
+      font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .case-query {
+      border-radius: 0 0 10px 10px;
+      margin-bottom: 0;
+    }
+
+    .case-result-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .concept-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .concept-pill {
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--term-white);
+      background: rgba(var(--gw), 0.03);
+      border: 1px solid rgba(var(--gw), 0.08);
+      box-shadow: none;
+    }
+
+    .case-footer-note {
+      color: var(--term-white);
+      font-size: 10.5px;
+      line-height: 1.7;
+      padding-top: 2px;
+    }
+
+    .footer-block {
+      margin-top: 22px; padding-top: 14px;
+      border-top: 1px solid rgba(var(--gw), 0.04);
+      font-size: 10.5px; color: var(--term-dim); line-height: 1.75;
+    }
+    .footer-block a { color: var(--accent); text-decoration: none; transition: color 0.25s ease, text-shadow 0.25s ease; }
+    .footer-block a:hover { text-decoration: underline; text-shadow: 0 0 10px rgba(136,216,232,0.2); }
+
+    .toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: rgba(28, 25, 45, 0.82);
+      border: 1px solid rgba(var(--gw), 0.10); border-radius: 12px;
+      padding: 10px 22px; font-family: 'Inter', sans-serif;
+      font-size: 11.5px; font-weight: 500; color: var(--term-white);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 1000;
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    .terminal-body ::-webkit-scrollbar { width: 4px; height: 4px; }
+    .terminal-body ::-webkit-scrollbar-track { background: transparent; }
+    .terminal-body ::-webkit-scrollbar-thumb { background: rgba(var(--gw), 0.06); border-radius: 4px; }
+    .terminal-body ::-webkit-scrollbar-thumb:hover { background: rgba(var(--gw), 0.12); }
+
+    /* Progress Badge (titlebar top-right) */
+    .progress-badge {
+      margin-left: auto;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--term-green);
+      background: rgba(128, 222, 166, 0.08);
+      border: 1px solid rgba(128, 222, 166, 0.18);
+      border-radius: 999px;
+      padding: 3px 10px;
+      letter-spacing: 0.04em;
+      transition: color 0.3s, background 0.3s;
+    }
+
+    /* Total Progress Bar */
+    .progress-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 16px;
+      background: rgba(var(--gw), 0.012);
+      border-bottom: 1px solid rgba(var(--gw), 0.04);
+      position: relative;
+      z-index: 11;
+    }
+    .progress-bar-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 9.5px;
+      color: var(--term-dim);
+      white-space: nowrap;
+      letter-spacing: 0.04em;
+    }
+    .progress-bar-track {
+      flex: 1;
+      height: 3px;
+      background: rgba(var(--gw), 0.07);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--term-green), var(--accent));
+      border-radius: 999px;
+      width: 0%;
+      transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 8px rgba(128, 222, 166, 0.3);
+    }
+    .progress-bar-pct {
+      font-family: 'Inter', sans-serif;
+      font-size: 9.5px;
+      color: var(--term-green);
+      letter-spacing: 0.04em;
+      min-width: 26px;
+      text-align: right;
+    }
+
+    /* Stats Strip (subtitle cards below hero title) */
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .stats-strip-card {
+      background: rgba(var(--gw), 0.03);
+      border: 1px solid rgba(var(--gw), 0.07);
+      border-radius: var(--radius-xs);
+      padding: 14px 14px 12px;
+    }
+    .stats-strip-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--term-dim);
+      margin-bottom: 4px;
+    }
+    .stats-strip-value {
+      font-family: 'Inter', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--term-white);
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .stats-strip-desc {
+      font-size: 10px;
+      color: var(--term-dim);
+      line-height: 1.6;
+    }
+
+    /* Reset Button */
+    .reset-btn {
+      position: fixed;
+      bottom: 22px;
+      right: 24px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--term-dim);
+      background: rgba(var(--gw), 0.03);
+      border: 1px solid rgba(var(--gw), 0.10);
+      border-radius: 8px;
+      padding: 7px 14px;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: color 0.25s, border-color 0.25s, background 0.25s;
+      z-index: 999;
+    }
+    .reset-btn:hover {
+      color: var(--term-red);
+      border-color: rgba(232, 128, 144, 0.25);
+      background: rgba(232, 128, 144, 0.05);
+    }
+
+    /* Case Jump Button (glass style) */
+    .case-jump-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--term-cyan);
+      background: rgba(136, 216, 232, 0.06);
+      border: 1px solid rgba(136, 216, 232, 0.18);
+      border-radius: 8px;
+      padding: 7px 14px;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: background 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.2s;
+      transform: translateZ(0);
+    }
+    .case-jump-btn:hover {
+      background: rgba(136, 216, 232, 0.10);
+      border-color: rgba(136, 216, 232, 0.30);
+      box-shadow: 0 0 14px rgba(136, 216, 232, 0.10);
+      transform: translateZ(0) translateY(-1px);
+    }
+
+    /* JOIN Diagram Styles */
+    .join-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 12px 0;
+      padding: 10px;
+      background: rgba(var(--gw), 0.02);
+      border-radius: var(--radius-xs);
+      border: 1px solid rgba(var(--gw), 0.05);
+    }
+
+    .join-diagram svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    @media (max-width: 900px) {
+      .practice-grid,
+      .detail-grid,
+      .explain-grid,
+      .case-layout,
+      .case-grid,
+      .case-result-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .case-nav {
+        position: static;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 12px; align-items: flex-start; }
+      .panel { padding: 18px 16px; }
+      .tab-btn { padding: 9px 14px; font-size: 10.5px; }
+      .roadmap-icon { width: 32px; height: 32px; }
+      .roadmap-icon svg { width: 15px; height: 15px; }
+      .roadmap-item { padding: 12px 14px; }
+      .quiz-head,
+      .module-head,
+      .case-hero-top,
+      .case-study-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="macos-window" id="macWindow">
+    <div class="titlebar">
+      <div class="traffic-lights">
+        <div class="tl-btn tl-close"></div>
+        <div class="tl-btn tl-minimize"></div>
+        <div class="tl-btn tl-maximize"></div>
+      </div>
+      <span class="titlebar-text">sql-roadmap-glass</span>
+      <span class="progress-badge" id="progressBadge">progresso 0/21</span>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <span class="progress-bar-label">progresso total</span>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+      <span class="progress-bar-pct" id="progressPct">0%</span>
+    </div>
+
+    <div class="tabs-bar" role="tablist">
+      <button class="tab-btn active" data-tab="roadmap" role="tab">• Roadmap</button>
+      <button class="tab-btn" data-tab="cases" role="tab">• Casos Reais</button>
+      <button class="tab-btn" data-tab="database" role="tab">• Banco de Dados</button>
+    </div>
+
+    <div class="terminal-body">
+      <div class="panel active" id="panel-roadmap">
+        <div class="typing-area">
+          <span class="t-dim">~/sql-roadmap</span> <span class="prompt-symbol">›</span> <span class="typed-text t-white" id="typedText">cat fundamentos-sql-glass.md</span><span class="cursor"></span>
+        </div>
+
+        <div class="hero-shell">
+          <div class="term-line">
+            <span class="t-dim">user@glassbook</span> <span class="prompt-symbol">%</span> <span class="t-white">cat fundamentos-sql-glass.md</span>
+          </div>
+          <h1 class="hero-title"><span class="t-green">Fundamentos</span> <span class="t-cyan">SQL</span></h1>
+          <p style="font-family:'Inter',sans-serif; font-size:10px; color:#ebb070; margin: 6px 0 0; letter-spacing:0.04em;">Por Ezequiel Gomes Rocha</p>
+          <div class="stats-strip">
+            <div class="stats-strip-card">
+              <div class="stats-strip-label">Conceitos</div>
+              <div class="stats-strip-value">20</div>
+              <div class="stats-strip-desc">Comandos centrais para sair do básico e entender a lógica mental de uma query SQL.</div>
+            </div>
+            <div class="stats-strip-card">
+              <div class="stats-strip-label">Progressão</div>
+              <div class="stats-strip-value">4 módulos</div>
+              <div class="stats-strip-desc">Organização pensada para iniciantes: selecionar, filtrar, agrupar, agregar e relacionar dados.</div>
+            </div>
+            <div class="stats-strip-card">
+              <div class="stats-strip-label">Aplicação</div>
+              <div class="stats-strip-value">Exemplos reais</div>
+              <div class="stats-strip-desc">Consultas de catálogo, vendas, clientes, pedidos, relatórios e análise de desempenho.</div>
+            </div>
+          </div>
+          <div class="pills-row">
+            <span class="pill blue">01 Seleção e Filtros</span>
+            <span class="pill green">02 Ordenação e Agrupamento</span>
+            <span class="pill orange">03 Agregações</span>
+            <span class="pill purple">04 JOINs</span>
+          </div>
+        </div>
+
+        <div class="output-header">
+          <span>•</span> Roadmap completo de fundamentos
+          <span class="t-dim" style="font-size: 10px; font-weight: 400; margin-left: auto;">clique para expandir</span>
+        </div>
+
+        <div class="module-list" id="moduleList"></div>
+
+        <div class="footer-block">
+          <span class="t-dim">roadmap ~/fundamentosSQL/glass</span><br>
+          <span class="t-dim">SQL Roadmap © 2026 — conteúdo didático / fundamentos sql</span><br>
+          <span class="t-dim">LINKEDIN ▸</span> <a href="https://www.linkedin.com/in/ezequielgomesrocha/" target="_blank">https://www.linkedin.com/in/ezequielgomesrocha/</a>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-cases">
+        <div class="term-line">
+          <span class="t-dim">~/sql-roadmap</span> <span class="prompt-symbol">›</span> <span class="t-white">cat casos-reais.sql</span>
+        </div>
+
+        <div class="case-hero">
+          <div class="case-hero-top">
+            <div class="case-hero-copy">
+              <span class="case-hero-label">aplicação prática de sql</span>
+              <h2 class="hero-title"><span class="t-cyan">Casos Reais</span> para mostrar SQL resolvendo problemas de negócio</h2>
+              <p class="hero-subtitle">
+                Esta seção abandona a ideia de catálogo de comandos e mostra SQL como ferramenta de análise, operação e tomada de decisão.
+                Cada estudo de caso simula uma necessidade real de empresa, com contexto, lógica, query, interpretação do retorno e insight prático.
+              </p>
+            </div>
+            <div class="case-hero-stats">
+              <span class="case-hero-stat">5 estudos de caso</span>
+              <span class="case-hero-stat">dados de negócio</span>
+              <span class="case-hero-stat">leitura guiada</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-layout">
+          <aside class="case-nav" id="caseNav"></aside>
+          <section class="case-stack" id="caseStudies"></section>
+        </div>
+
+        <div class="footer-block">
+          <span class="t-dim">roadmap ~/fundamentosSQL/glass</span><br>
+          <span class="t-dim">Casos Reais = SQL aplicado a CRM, vendas, financeiro, operação e análise de comportamento</span>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-database">
+        <div class="term-line">
+          <span class="t-dim">~/sql-roadmap</span> <span class="prompt-symbol">›</span> <span class="t-white">cat banco-dados-e-pratica.md</span>
+        </div>
+
+        <div class="output-header mt"><span>•</span> Banco de Dados, SQL e prática real</div>
+
+        <div class="explain-grid">
+          <div class="info-block">
+            <h4>SQL não é banco de dados</h4>
+            <p><strong>SQL</strong> é a linguagem usada para conversar com um banco relacional. O banco armazena dados; o SQL cria, consulta, atualiza, agrupa e relaciona esses dados.</p>
+          </div>
+          <div class="info-block">
+            <h4>Modelo mental correto</h4>
+            <p>Pense em SQL como uma forma de responder perguntas sobre tabelas: <strong>o que quero ver</strong>, <strong>de onde vem</strong>, <strong>o que entra</strong>, <strong>como agrupar</strong> e <strong>como ordenar</strong>.</p>
+          </div>
+        </div>
+
+        <div class="output-header"><span>•</span> Principais SGBDs</div>
+
+        <div class="practice-grid">
+          <div class="practice-card">
+            <h4>PostgreSQL</h4>
+            <ul>
+              <li>Robusto, open-source e muito usado em produtos modernos.</li>
+              <li>Ótimo para backend, analytics, estruturas complexas e JSON.</li>
+              <li>Bom para aprender SQL sério desde cedo.</li>
+            </ul>
+          </div>
+          <div class="practice-card">
+            <h4>MySQL</h4>
+            <ul>
+              <li>Popular no ecossistema web e em muitos hosts compartilhados.</li>
+              <li>Sintaxe amigável para iniciantes.</li>
+              <li>Muito presente em sistemas legados e aplicações tradicionais.</li>
+            </ul>
+          </div>
+          <div class="practice-card">
+            <h4>SQLite</h4>
+            <ul>
+              <li>Leve, local e sem servidor.</li>
+              <li>Excelente para protótipos, estudos e apps menores.</li>
+              <li>Ideal quando você quer focar na lógica sem configurar ambiente pesado.</li>
+            </ul>
+          </div>
+          <div class="practice-card">
+            <h4>SQL Server</h4>
+            <ul>
+              <li>Muito forte no meio corporativo e ecossistema Microsoft.</li>
+              <li>Integra bem com .NET, Power BI e Azure.</li>
+              <li>Útil para quem trabalha em times enterprise.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="output-header"><span>•</span> Como ler uma query SQL</div>
+
+        <div class="info-block">
+          <h4>Ordem mental para entender uma consulta</h4>
+          <ul>
+            <li><strong>FROM / JOIN</strong> → de onde os dados vêm</li>
+            <li><strong>WHERE</strong> → quais linhas entram</li>
+            <li><strong>GROUP BY</strong> → como os dados são agrupados</li>
+            <li><strong>HAVING</strong> → quais grupos permanecem</li>
+            <li><strong>SELECT</strong> → o que será mostrado</li>
+            <li><strong>ORDER BY / LIMIT</strong> → como o resultado final será entregue</li>
+          </ul>
+        </div>
+
+        <div class="output-header"><span>•</span> Onde praticar e boas práticas</div>
+
+        <div class="practice-grid">
+          <div class="practice-card">
+            <h4>Ferramentas para praticar</h4>
+            <ul>
+              <li>Terminal: <strong>psql</strong>, <strong>mysql</strong>, <strong>sqlite3</strong></li>
+              <li>GUI: DBeaver, pgAdmin, DataGrip</li>
+              <li>Online: DB Fiddle, SQLite Online, SQLBolt</li>
+              <li>No código: Node.js, Python, Java, PHP</li>
+            </ul>
+          </div>
+          <div class="practice-card">
+            <h4>Boas práticas iniciais</h4>
+            <ul>
+              <li>Evite <strong>SELECT *</strong> em produção quando souber as colunas desejadas.</li>
+              <li>Nunca rode <strong>UPDATE</strong> ou <strong>DELETE</strong> sem revisar o <strong>WHERE</strong>.</li>
+              <li>Use aliases para melhorar legibilidade em JOINs.</li>
+              <li>Leia o resultado como uma pergunta respondida pela base.</li>
+            </ul>
+          </div>
+          <div class="practice-card">
+            <h4>Erros comuns de iniciantes</h4>
+            <ul>
+              <li>Confundir <strong>WHERE</strong> com <strong>HAVING</strong>.</li>
+              <li>Esquecer que <strong>NULL</strong> não se compara com <strong>=</strong>.</li>
+              <li>Usar filtros textuais sem pensar em performance.</li>
+              <li>Agrupar sem entender quais colunas precisam estar no <strong>GROUP BY</strong>.</li>
+            </ul>
+          </div>
+          <div class="practice-card">
+            <h4>Fluxo recomendado de estudo</h4>
+            <ul>
+              <li>Aprenda <strong>SELECT</strong>, <strong>FROM</strong>, <strong>WHERE</strong>.</li>
+              <li>Depois domine <strong>ORDER BY</strong>, <strong>GROUP BY</strong>, <strong>HAVING</strong>.</li>
+              <li>Em seguida, pratique <strong>COUNT</strong>, <strong>SUM</strong>, <strong>AVG</strong>, <strong>MIN</strong>, <strong>MAX</strong>.</li>
+              <li>Finalize com <strong>JOINs</strong> e depois parta para subqueries e CTEs.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-block">
+          <span class="t-dim">roadmap ~/fundamentosSQL/glass</span><br>
+          <span class="t-dim">SQL = linguagem &nbsp;|&nbsp; PostgreSQL / MySQL / SQLite / SQL Server = banco &nbsp;|&nbsp; terminal / GUI / online = ferramenta</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <button class="reset-btn" id="resetBtn" title="Resetar progresso">↺ resetar progresso</button>
+
+  <script>
+    const STORAGE_KEY = 'sql_glass_progress_v1';
+
+    const modules = [
+      {
+        id: 1,
+        title: 'Seleção e Filtros',
+        desc: 'Primeiro domínio: escolher colunas, definir origem, filtrar e lidar com textos, listas, intervalos e valores nulos.',
+        color: 'var(--term-blue)',
+        items: [
+          {
+            id: '1-SELECT',
+            name: 'SELECT',
+            level: 'base',
+            short: 'Escolhe quais colunas aparecerão no resultado.',
+            explain: 'O <strong>SELECT</strong> define a projeção da consulta: quais colunas você quer enxergar no resultado final. Ele é a "pergunta visível" da query. Embora seja escrito primeiro, mentalmente você o interpreta junto com a origem dos dados e com os filtros aplicados.',
+            mental: [
+              '<strong>Use quando:</strong> você precisa montar um relatório, listar dados ou extrair um subconjunto de colunas.',
+              '<strong>Boa prática:</strong> prefira colunas explícitas em vez de <strong>*</strong> quando estiver construindo interfaces, APIs ou relatórios.',
+              '<strong>Pense assim:</strong> "quais campos eu realmente preciso devolver?"'
+            ],
+            codeTitle: 'Selecionando colunas específicas',
+            code: `<span class="kw">SELECT</span> <span class="col">nome</span>, <span class="col">email</span>, <span class="col">cidade</span><br><span class="kw">FROM</span> <span class="tbl">clientes</span>;`,
+            result: 'O resultado terá apenas as colunas <strong>nome</strong>, <strong>email</strong> e <strong>cidade</strong>. Isso reduz ruído visual e evita tráfego desnecessário de dados.',
+            tip: 'Evite <strong>SELECT *</strong> em produção quando você já conhece a estrutura esperada.',
+            warning: 'Iniciantes costumam usar <strong>*</strong> sempre. Isso funciona no começo, mas vira problema de performance e manutenção em cenários reais.',
+            icon: 'database'
+          },
+          {
+            id: '1-FROM',
+            name: 'FROM',
+            level: 'base',
+            short: 'Define de qual tabela ou conjunto de dados a consulta parte.',
+            explain: 'O <strong>FROM</strong> responde à pergunta: "de onde vêm esses dados?". Ele é o ponto de origem da query. Em consultas simples, aponta para uma tabela. Em consultas mais avançadas, pode apontar para subqueries, views ou combinações com JOIN.',
+            mental: [
+              '<strong>Use quando:</strong> você precisa declarar a tabela base do resultado.',
+              '<strong>Boa prática:</strong> use alias curtos e claros quando a consulta crescer.',
+              '<strong>Pense assim:</strong> "qual entidade do negócio estou consultando?"'
+            ],
+            codeTitle: 'Origem dos dados com alias',
+            code: `<span class="kw">SELECT</span> <span class="col">p.nome</span>, <span class="col">p.preco</span><br><span class="kw">FROM</span> <span class="tbl">produtos</span> p<br><span class="kw">WHERE</span> <span class="col">p.ativo</span> <span class="op">=</span> <span class="num">1</span>;`,
+            result: 'A query busca dados da tabela <strong>produtos</strong>, usando o alias <strong>p</strong> para tornar a leitura mais enxuta.',
+            tip: 'Aliases ficam ainda mais importantes quando duas ou mais tabelas participam da mesma consulta.',
+            warning: 'Sem uma origem bem definida, sua query perde clareza e fica mais sujeita a ambiguidade.',
+            icon: 'stack'
+          },
+          {
+            id: '1-WHERE',
+            name: 'WHERE',
+            level: 'fundamental',
+            short: 'Filtra linhas antes de agrupar ou ordenar.',
+            explain: 'O <strong>WHERE</strong> filtra registros linha a linha. Só permanecem no fluxo da query as linhas cuja condição retorna verdadeiro. É uma das cláusulas mais importantes do SQL, porque controla exatamente o recorte do conjunto analisado.',
+            mental: [
+              '<strong>Use quando:</strong> quiser limitar os dados a uma condição específica.',
+              '<strong>Boa prática:</strong> escreva condições legíveis, quebrando linhas quando necessário.',
+              '<strong>Pense assim:</strong> "quais registros entram na análise?"'
+            ],
+            codeTitle: 'Filtrando por condição',
+            code: `<span class="kw">SELECT</span> <span class="col">nome</span>, <span class="col">cidade</span><br><span class="kw">FROM</span> <span class="tbl">clientes</span><br><span class="kw">WHERE</span> <span class="col">cidade</span> <span class="op">=</span> <span class="str">'São Paulo'</span>;`,
+            result: 'Somente clientes da cidade de São Paulo serão devolvidos. Todas as outras linhas são descartadas antes das próximas etapas da consulta.',
+            tip: 'Aprender <strong>WHERE</strong> bem muda completamente sua habilidade de consultar dados com precisão.',
+            warning: 'Não confunda <strong>WHERE</strong> com <strong>HAVING</strong>: WHERE filtra linhas; HAVING filtra grupos.',
+            icon: 'filter'
+          },
+          {
+            id: '1-AND-OR-NOT',
+            name: 'AND / OR / NOT',
+            level: 'lógica',
+            short: 'Combina ou inverte condições dentro do filtro.',
+            explain: 'Esses operadores lógicos permitem construir filtros compostos. <strong>AND</strong> exige que todas as condições sejam verdadeiras. <strong>OR</strong> aceita qualquer uma. <strong>NOT</strong> inverte uma condição. Eles são essenciais para transformar regras de negócio em consultas.',
+            mental: [
+              '<strong>Use quando:</strong> o filtro tiver mais de um critério.',
+              '<strong>Boa prática:</strong> agrupe com parênteses sempre que houver ambiguidade.',
+              '<strong>Pense assim:</strong> "quais combinações de regras definem o conjunto correto?"'
+            ],
+            codeTitle: 'Combinando regras',
+            code: `<span class="kw">SELECT</span> <span class="col">nome</span>, <span class="col">salario</span><br><span class="kw">FROM</span> <span class="tbl">funcionarios</span><br><span class="kw">WHERE</span> (<span class="col">departamento</span> <span class="op">=</span> <span class="str">'TI'</span> <span class="kw">OR</span> <span class="col">departamento</span> <span class="op">=</span> <span class="str">'Dados'</span>)<br>&nbsp;&nbsp;<span class="kw">AND</span> <span class="col">salario</span> <span class="op">></span> <span class="num">5000</span>;`,
+            result: 'Serão listados funcionários de TI ou Dados, desde que o salário também seja maior que 5000.',
+            tip: 'Parênteses deixam explícita a intenção do filtro e evitam erros por precedência lógica.',
+            warning: 'Sem parênteses, o banco segue sua própria ordem de avaliação — e isso pode mudar totalmente o resultado esperado.',
+            icon: 'branch'
+          },
+          {
+            id: '1-IN-NOT-IN',
+            name: 'IN / NOT IN',
+            level: 'produtividade',
+            short: 'Compara um valor contra uma lista de possibilidades.',
+            explain: 'O <strong>IN</strong> simplifica filtros com vários valores possíveis. Em vez de escrever vários <strong>OR</strong>, você passa uma lista. O <strong>NOT IN</strong> exclui itens dessa lista. É uma forma mais elegante de representar pertencimento.',
+            mental: [
+              '<strong>Use quando:</strong> a condição depende de uma lista finita de valores.',
+              '<strong>Boa prática:</strong> revise se a lista contém <strong>NULL</strong> antes de usar <strong>NOT IN</strong>.',
+              '<strong>Pense assim:</strong> "esse valor está dentro deste conjunto permitido?"'
+            ],
+            codeTitle: 'Lista de status',
+            code: `<span class="kw">SELECT</span> <span class="col">numero_pedido</span>, <span class="col">status</span><br><span class="kw">FROM</span> <span class="tbl">pedidos</span><br><span class="kw">WHERE</span> <span class="col">status</span> <span class="kw">IN</span> (<span class="str">'pago'</span>, <span class="str">'enviado'</span>, <span class="str">'entregue'</span>);`,
+            result: 'A consulta trará apenas pedidos em estados relevantes do fluxo comercial, ignorando os demais.',
+            tip: 'Em cenários com muitos valores, <strong>IN</strong> melhora bastante a legibilidade em relação a vários <strong>OR</strong> encadeados.',
+            warning: '<strong>NOT IN</strong> com listas contendo <strong>NULL</strong> pode causar comportamentos inesperados.',
+            icon: 'list'
+          },
+          {
+            id: '1-BETWEEN',
+            name: 'BETWEEN',
+            level: 'faixa',
+            short: 'Filtra intervalos de valores incluindo os extremos.',
+            explain: 'O <strong>BETWEEN</strong> é uma forma expressiva de filtrar intervalos. Ele funciona com números, datas e até strings, e inclui os limites inferior e superior. É muito útil em relatórios por faixa de preço, período ou pontuação.',
+            mental: [
+              '<strong>Use quando:</strong> o dado estiver em um intervalo contínuo.',
+              '<strong>Boa prática:</strong> lembre-se de que os extremos são incluídos.',
+              '<strong>Pense assim:</strong> "quero tudo entre A e B, inclusive."'
+            ],
+            codeTitle: 'Faixa de valores',
+            code: `<span class="kw">SELECT</span> <span class="col">numero_pedido</span>, <span class="col">valor_total</span><br><span class="kw">FROM</span> <span class="tbl">pedidos</span><br><span class="kw">WHERE</span> <span class="col">valor_total</span> <span class="kw">BETWEEN</span> <span class="num">100</span> <span class="kw">AND</span> <span class="num">500</span>;`,
+            result: 'O resultado conterá pedidos cujo valor está entre 100 e 500, incluindo exatamente 100 e exatamente 500.',
+            tip: 'Em filtros de datas, revise o tipo da coluna para não cometer erros com horário embutido no campo.',
+            warning: 'Muita gente acha que BETWEEN exclui os extremos. Não exclui.',
+            icon: 'range'
+          },
+          {
+            id: '1-LIKE',
+            name: 'LIKE',
+            level: 'texto',
+            short: 'Busca padrões textuais usando curingas.',
+            explain: 'O <strong>LIKE</strong> serve para buscas aproximadas em strings. O símbolo <strong>%</strong> representa qualquer sequência de caracteres; <strong>_</strong> representa um único caractere. É ótimo para filtros flexíveis em nome, email, cidade ou categoria.',
+            mental: [
+              '<strong>Use quando:</strong> quiser localizar textos por prefixo, sufixo ou trecho interno.',
+              '<strong>Boa prática:</strong> avalie impacto de performance em bases grandes.',
+              '<strong>Pense assim:</strong> "quais textos seguem este padrão?"'
+            ],
+            codeTitle: 'Busca textual',
+            code: `<span class="kw">SELECT</span> <span class="col">nome</span>, <span class="col">email</span><br><span class="kw">FROM</span> <span class="tbl">clientes</span><br><span class="kw">WHERE</span> <span class="col">email</span> <span class="kw">LIKE</span> <span class="str">'%@empresa.com.br'</span>;`,
+            result: 'Serão retornados somente clientes com email corporativo nesse domínio.',
+            tip: 'Prefixos como <strong>A%</strong> costumam ser mais eficientes do que padrões com <strong>%</strong> no começo.',
+            warning: 'Buscas muito abertas com LIKE podem ficar lentas em tabelas grandes sem estratégia de indexação.',
+            icon: 'search'
+          },
+          {
+            id: '1-IS-NULL',
+            name: 'IS NULL',
+            level: 'essencial',
+            short: 'Detecta ausência real de valor.',
+            explain: 'No SQL, <strong>NULL</strong> significa ausência de valor. Não é string vazia, não é zero e não é falso. Por isso, você não pode testar NULL com <strong>=</strong>. A forma correta é usar <strong>IS NULL</strong> ou <strong>IS NOT NULL</strong>.',
+            mental: [
+              '<strong>Use quando:</strong> quiser encontrar registros incompletos, pendentes ou sem preenchimento.',
+              '<strong>Boa prática:</strong> diferencie claramente vazio de ausente.',
+              '<strong>Pense assim:</strong> "esse dado existe ou está faltando?"'
+            ],
+            codeTitle: 'Campos ausentes',
+            code: `<span class="kw">SELECT</span> <span class="col">nome</span>, <span class="col">telefone</span><br><span class="kw">FROM</span> <span class="tbl">clientes</span><br><span class="kw">WHERE</span> <span class="col">telefone</span> <span class="kw">IS NULL</span>;`,
+            result: 'A consulta devolve clientes sem telefone cadastrado, algo útil para tarefas de qualidade de dados ou CRM.',
+            tip: 'Verificar NULL é uma competência básica para qualquer análise consistente.',
+            warning: 'Nunca use <strong>= NULL</strong>. Essa comparação não funciona como iniciantes imaginam.',
+            icon: 'alert'
+          }
+        ]
+      },
+      {
+        id: 2,
+        title: 'Ordenação e Agrupamento',
+        desc: 'Depois de filtrar corretamente, aprenda a ordenar resultados, resumir conjuntos e limitar o volume retornado.',
+        color: 'var(--term-green)',
+        items: [
+          {
+            id: '2-ORDER-BY',
+            name: 'ORDER BY',
+            level: 'base',
+            short: 'Define como o resultado final será ordenado.',
+            explain: 'O <strong>ORDER BY</strong> controla a apresentação do resultado. Sem ele, a ordem natural das linhas não deve ser considerada confiável. Use <strong>ASC</strong> para crescente e <strong>DESC</strong> para decrescente.',
+            mental: [
+              '<strong>Use quando:</strong> quiser ranking, ordenação temporal, alfabética ou por métrica.',
+              '<strong>Boa prática:</strong> ordene pelas colunas mais relevantes para o objetivo da consulta.',
+              '<strong>Pense assim:</strong> "como o usuário precisa enxergar esse resultado?"'
+            ],
+            codeTitle: 'Ordenando por métrica',
+            code: `<span class="kw">SELECT</span> <span class="col">nome</span>, <span class="col">salario</span><br><span class="kw">FROM</span> <span class="tbl">funcionarios</span><br><span class="kw">ORDER BY</span> <span class="col">salario</span> <span class="kw">DESC</span>;`,
+            result: 'Os salários mais altos aparecerão primeiro, transformando a consulta em um ranking simples.',
+            tip: 'Você pode ordenar por múltiplas colunas para desempatar resultados.',
+            warning: 'Sem ORDER BY, não assuma que a ordem virá "naturalmente certa".',
+            icon: 'sort'
+          },
+          {
+            id: '2-GROUP-BY',
+            name: 'GROUP BY',
+            level: 'fundamental',
+            short: 'Agrupa linhas com o mesmo valor para gerar resumos.',
+            explain: 'O <strong>GROUP BY</strong> transforma várias linhas em grupos, permitindo calcular totais, médias, mínimos e máximos por categoria, cidade, departamento ou qualquer dimensão do dado.',
+            mental: [
+              '<strong>Use quando:</strong> quiser resumir o dado em vez de listar linha por linha.',
+              '<strong>Boa prática:</strong> toda coluna no SELECT sem função agregadora deve aparecer no GROUP BY.',
+              '<strong>Pense assim:</strong> "quero olhar para conjuntos, não para linhas individuais."'
+            ],
+            codeTitle: 'Contagem por categoria',
+            code: `<span class="kw">SELECT</span> <span class="col">cidade</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="col">total</span><br><span class="kw">FROM</span> <span class="tbl">clientes</span><br><span class="kw">GROUP BY</span> <span class="col">cidade</span>;`,
+            result: 'Cada cidade aparece uma única vez, acompanhada do total de clientes daquela cidade.',
+            tip: 'GROUP BY é o ponto de virada entre consulta operacional e análise de dados.',
+            warning: 'Selecionar colunas fora do GROUP BY sem agregação gera erro ou comportamento inconsistente, dependendo do banco.',
+            icon: 'group'
+          },
+          {
+            id: '2-HAVING',
+            name: 'HAVING',
+            level: 'analítico',
+            short: 'Filtra grupos depois que eles já foram agregados.',
+            explain: 'O <strong>HAVING</strong> funciona após o agrupamento. Enquanto o WHERE escolhe quais linhas entram, o HAVING decide quais grupos permanecem depois de aplicar agregações.',
+            mental: [
+              '<strong>Use quando:</strong> quiser filtrar resultados agregados.',
+              '<strong>Boa prática:</strong> mantenha o máximo de filtros no WHERE e use HAVING só para condições sobre grupos.',
+              '<strong>Pense assim:</strong> "agora que agrupei, quais grupos interessam?"'
+            ],
+            codeTitle: 'Filtro após agregação',
+            code: `<span class="kw">SELECT</span> <span class="col">cidade</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="col">total</span><br><span class="kw">FROM</span> <span class="tbl">clientes</span><br><span class="kw">GROUP BY</span> <span class="col">cidade</span><br><span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) <span class="op">></span> <span class="num">10</span>;`,
+            result: 'Somente cidades com mais de 10 clientes aparecem no resultado.',
+            tip: 'A regra prática é simples: WHERE para linhas, HAVING para grupos.',
+            warning: 'Usar HAVING para condições que poderiam estar no WHERE costuma deixar a consulta menos eficiente.',
+            icon: 'funnel'
+          },
+          {
+            id: '2-LIMIT',
+            name: 'LIMIT',
+            level: 'prático',
+            short: 'Restringe a quantidade de linhas retornadas.',
+            explain: 'O <strong>LIMIT</strong> é excelente para explorar dados, criar amostras, montar paginação e evitar retornos excessivos. Quase sempre vem combinado com ORDER BY quando você quer um "top N" consistente.',
+            mental: [
+              '<strong>Use quando:</strong> quiser amostras, rankings ou paginação.',
+              '<strong>Boa prática:</strong> combine com ORDER BY para garantir previsibilidade.',
+              '<strong>Pense assim:</strong> "quero só os primeiros N resultados úteis."'
+            ],
+            codeTitle: 'Top recentes',
+            code: `<span class="kw">SELECT</span> *<br><span class="kw">FROM</span> <span class="tbl">pedidos</span><br><span class="kw">ORDER BY</span> <span class="col">data_pedido</span> <span class="kw">DESC</span><br><span class="kw">LIMIT</span> <span class="num">10</span>;`,
+            result: 'A consulta devolve os 10 pedidos mais recentes, algo muito comum em dashboards e painéis operacionais.',
+            tip: 'Em paginação, LIMIT costuma ser usado junto com OFFSET.',
+            warning: 'Usar LIMIT sem ordenação costuma trazer "os primeiros" de forma arbitrária.',
+            icon: 'limit'
+          },
+          {
+            id: '2-DISTINCT',
+            name: 'DISTINCT',
+            level: 'limpeza',
+            short: 'Remove duplicações do resultado.',
+            explain: 'O <strong>DISTINCT</strong> retorna apenas combinações únicas das colunas selecionadas. É útil quando você quer listas sem repetição, como cidades, categorias ou tipos de status.',
+            mental: [
+              '<strong>Use quando:</strong> quiser deduplicar o resultado visível.',
+              '<strong>Boa prática:</strong> lembre que o DISTINCT atua sobre a combinação completa das colunas do SELECT.',
+              '<strong>Pense assim:</strong> "quero valores únicos para esse recorte."'
+            ],
+            codeTitle: 'Valores únicos',
+            code: `<span class="kw">SELECT DISTINCT</span> <span class="col">cidade</span><br><span class="kw">FROM</span> <span class="tbl">clientes</span><br><span class="kw">ORDER BY</span> <span class="col">cidade</span>;`,
+            result: 'Cada cidade será listada apenas uma vez, mesmo que existam muitos clientes naquela mesma localidade.',
+            tip: 'Para contar distintos, combine com <strong>COUNT(DISTINCT coluna)</strong>.',
+            warning: 'DISTINCT não substitui GROUP BY em análises agregadas; cada um resolve um tipo de problema.',
+            icon: 'sparkles'
+          }
+        ]
+      },
+      {
+        id: 3,
+        title: 'Funções de Agregação',
+        desc: 'Aqui você deixa de só consultar linhas e passa a medir comportamento, total, média, extremos e volume dos dados.',
+        color: 'var(--term-orange)',
+        items: [
+          {
+            id: '3-COUNT',
+            name: 'COUNT()',
+            level: 'métrica',
+            short: 'Conta quantas linhas ou valores existem.',
+            explain: 'O <strong>COUNT()</strong> é uma das funções mais usadas do SQL. Ele permite medir volume, saber quantos registros existem ou quantos valores preenchidos uma coluna possui.',
+            mental: [
+              '<strong>Use quando:</strong> quiser medir quantidade.',
+              '<strong>Boa prática:</strong> diferencie <strong>COUNT(*)</strong> de <strong>COUNT(coluna)</strong>.',
+              '<strong>Pense assim:</strong> "quantos elementos tenho neste conjunto?"'
+            ],
+            codeTitle: 'Contando tudo e contando preenchidos',
+            code: `<span class="kw">SELECT</span><br>&nbsp;&nbsp;<span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="col">total_registros</span>,<br>&nbsp;&nbsp;<span class="fn">COUNT</span>(<span class="col">email</span>) <span class="kw">AS</span> <span class="col">com_email</span><br><span class="kw">FROM</span> <span class="tbl">clientes</span>;`,
+            result: '<strong>COUNT(*)</strong> conta todas as linhas; <strong>COUNT(email)</strong> conta apenas linhas onde o email não é nulo.',
+            tip: 'É uma função perfeita para KPIs iniciais e validações rápidas da base.',
+            warning: 'Muita gente supõe que COUNT(coluna) conta tudo. Não conta valores nulos.',
+            icon: 'count'
+          },
+          {
+            id: '3-SUM',
+            name: 'SUM()',
+            level: 'financeiro',
+            short: 'Soma valores numéricos.',
+            explain: 'O <strong>SUM()</strong> agrega valores numéricos, sendo ideal para receita, custo, quantidade, comissão, faturamento ou qualquer métrica acumulada.',
+            mental: [
+              '<strong>Use quando:</strong> o objetivo for totalizar uma medida.',
+              '<strong>Boa prática:</strong> combine com GROUP BY para obter totais por dimensão.',
+              '<strong>Pense assim:</strong> "qual é o valor acumulado deste recorte?"'
+            ],
+            codeTitle: 'Somando receita',
+            code: `<span class="kw">SELECT</span> <span class="fn">SUM</span>(<span class="col">valor_total</span>) <span class="kw">AS</span> <span class="col">receita</span><br><span class="kw">FROM</span> <span class="tbl">pedidos</span><br><span class="kw">WHERE</span> <span class="col">status</span> <span class="op">=</span> <span class="str">'pago'</span>;`,
+            result: 'O resultado representa a receita total dos pedidos efetivamente pagos.',
+            tip: 'Para dashboards, SUM costuma andar com filtros de período, status ou categoria.',
+            warning: 'Se você somar sem filtrar corretamente, o total pode misturar dados inválidos para a métrica.',
+            icon: 'sum'
+          },
+          {
+            id: '3-AVG',
+            name: 'AVG()',
+            level: 'média',
+            short: 'Calcula média aritmética de valores.',
+            explain: 'O <strong>AVG()</strong> ajuda a entender tendência central: ticket médio, preço médio, tempo médio, nota média. Ele ignora valores nulos, o que pode ser desejado ou não, dependendo do contexto.',
+            mental: [
+              '<strong>Use quando:</strong> quiser entender comportamento médio.',
+              '<strong>Boa prática:</strong> reflita se valores ausentes devem ser ignorados ou tratados.',
+              '<strong>Pense assim:</strong> "qual é o valor típico deste grupo?"'
+            ],
+            codeTitle: 'Média por categoria',
+            code: `<span class="kw">SELECT</span> <span class="col">categoria</span>, <span class="fn">AVG</span>(<span class="col">preco</span>) <span class="kw">AS</span> <span class="col">preco_medio</span><br><span class="kw">FROM</span> <span class="tbl">produtos</span><br><span class="kw">GROUP BY</span> <span class="col">categoria</span>;`,
+            result: 'Cada categoria terá seu preço médio calculado, útil para comparar posicionamento comercial.',
+            tip: 'Média sem contexto pode enganar. Muitas vezes vale olhar também volume e dispersão.',
+            warning: 'Se poucos registros extremos existirem, a média pode distorcer a interpretação do grupo.',
+            icon: 'avg'
+          },
+          {
+            id: '3-MIN-MAX',
+            name: 'MIN() / MAX()',
+            level: 'extremos',
+            short: 'Mostram menor e maior valor dentro de um conjunto.',
+            explain: '<strong>MIN()</strong> e <strong>MAX()</strong> ajudam a encontrar extremos: menor preço, maior salário, primeira data, última compra. São ótimas funções para criar referência e intervalo.',
+            mental: [
+              '<strong>Use quando:</strong> quiser identificar limites inferiores e superiores.',
+              '<strong>Boa prática:</strong> combine com GROUP BY para extremos por cliente, categoria ou período.',
+              '<strong>Pense assim:</strong> "qual é o menor e o maior valor deste conjunto?"'
+            ],
+            codeTitle: 'Faixa de valores',
+            code: `<span class="kw">SELECT</span><br>&nbsp;&nbsp;<span class="fn">MIN</span>(<span class="col">preco</span>) <span class="kw">AS</span> <span class="col">mais_barato</span>,<br>&nbsp;&nbsp;<span class="fn">MAX</span>(<span class="col">preco</span>) <span class="kw">AS</span> <span class="col">mais_caro</span><br><span class="kw">FROM</span> <span class="tbl">produtos</span>;`,
+            result: 'A consulta informa o limite inferior e superior de preço no catálogo.',
+            tip: 'Com datas, MIN e MAX ajudam a descobrir primeiro e último evento.',
+            warning: 'Extremos são úteis, mas sozinhos não explicam distribuição; trate-os como referência, não como panorama completo.',
+            icon: 'minmax'
+          }
+        ]
+      },
+      {
+        id: 4,
+        title: 'JOINs — Relacionando Tabelas',
+        desc: 'O nível em que SQL começa a parecer modelagem de negócio: clientes com pedidos, produtos com categorias e eventos com responsáveis.',
+        color: 'var(--term-purple)',
+        items: [
+          {
+            id: '4-INNER-JOIN',
+            name: 'INNER JOIN',
+            level: 'relação',
+            short: 'Retorna apenas registros com correspondência dos dois lados.',
+            explain: 'O <strong>INNER JOIN</strong> une duas tabelas mantendo somente os registros que possuem correspondência entre si. É o join mais comum quando você quer cruzar informações válidas entre entidades relacionadas.',
+            mental: [
+              '<strong>Use quando:</strong> fizer sentido considerar apenas relacionamentos existentes.',
+              '<strong>Boa prática:</strong> deixe a condição do <strong>ON</strong> extremamente clara.',
+              '<strong>Pense assim:</strong> "quero apenas o que existe nas duas tabelas."'
+            ],
+            codeTitle: 'Clientes com pedidos',
+            code: `<span class="kw">SELECT</span> <span class="col">c.nome</span>, <span class="col">p.numero_pedido</span>, <span class="col">p.valor_total</span><br><span class="kw">FROM</span> <span class="tbl">clientes</span> c<br><span class="kw">INNER JOIN</span> <span class="tbl">pedidos</span> p <span class="kw">ON</span> <span class="col">c.id</span> <span class="op">=</span> <span class="col">p.cliente_id</span><br><span class="kw">WHERE</span> <span class="col">p.status</span> <span class="op">=</span> <span class="str">'enviado'</span>;`,
+            result: 'Somente clientes que têm pedidos enviados aparecerão. Clientes sem pedido e pedidos sem cliente correspondente ficam de fora.',
+            tip: 'Quando você escreve apenas <strong>JOIN</strong>, na prática está usando <strong>INNER JOIN</strong>.',
+            warning: 'Se a condição do ON estiver errada, você pode multiplicar linhas indevidamente.',
+            icon: 'join',
+            joinDiagram: `<svg viewBox="0 0 100 60" style="width: 80px; height: 48px;"><circle cx="35" cy="30" r="22" fill="none" stroke="var(--accent)" stroke-width="2"/><circle cx="65" cy="30" r="22" fill="none" stroke="var(--accent)" stroke-width="2"/><path d="M 47.5 15.5 A 22 22 0 0 1 47.5 44.5 A 22 22 0 0 1 47.5 15.5" fill="var(--accent)" opacity="0.7"/><text x="28" y="33" font-size="10" fill="var(--term-dim)" font-weight="bold">A</text><text x="67" y="33" font-size="10" fill="var(--term-dim)" font-weight="bold">B</text></svg>`
+          },
+          {
+            id: '4-LEFT-JOIN',
+            name: 'LEFT JOIN',
+            level: 'análise',
+            short: 'Mantém tudo da tabela da esquerda, com ou sem correspondência à direita.',
+            explain: 'O <strong>LEFT JOIN</strong> é valioso para detectar ausência de relacionamento. Ele garante a presença de todas as linhas da tabela da esquerda, preenchendo com NULL quando não existir par à direita.',
+            mental: [
+              '<strong>Use quando:</strong> a tabela principal precisa aparecer por completo.',
+              '<strong>Boa prática:</strong> combine com <strong>IS NULL</strong> para detectar faltantes.',
+              '<strong>Pense assim:</strong> "quero tudo da base principal, mesmo sem vínculo."'
+            ],
+            codeTitle: 'Todos os clientes',
+            code: `<span class="kw">SELECT</span> <span class="col">c.nome</span>, <span class="col">p.numero_pedido</span><br><span class="kw">FROM</span> <span class="tbl">clientes</span> c<br><span class="kw">LEFT JOIN</span> <span class="tbl">pedidos</span> p <span class="kw">ON</span> <span class="col">c.id</span> <span class="op">=</span> <span class="col">p.cliente_id</span>;`,
+            result: 'Clientes sem pedido continuam aparecendo, mas a coluna de pedido vem como NULL.',
+            tip: 'Perfeito para achar clientes sem compras, produtos sem venda ou registros órfãos do lado direito.',
+            warning: 'Se você filtrar colunas da tabela da direita no WHERE sem cuidado, pode transformar o LEFT JOIN em INNER sem perceber.',
+            icon: 'leftjoin',
+            joinDiagram: `<svg viewBox="0 0 100 60" style="width: 80px; height: 48px;"><circle cx="35" cy="30" r="22" fill="var(--accent)" opacity="0.7" stroke="var(--accent)" stroke-width="2"/><circle cx="65" cy="30" r="22" fill="none" stroke="var(--accent)" stroke-width="2"/><text x="28" y="33" font-size="10" fill="var(--term-white)" font-weight="bold">A</text><text x="67" y="33" font-size="10" fill="var(--term-dim)" font-weight="bold">B</text></svg>`
+          },
+          {
+            id: '4-RIGHT-JOIN',
+            name: 'RIGHT JOIN',
+            level: 'espelhado',
+            short: 'Mantém tudo da tabela da direita.',
+            explain: 'O <strong>RIGHT JOIN</strong> é o espelho do LEFT JOIN. Em muitos times ele aparece menos, porque boa parte dos desenvolvedores prefere inverter a ordem das tabelas e usar LEFT JOIN por consistência de leitura.',
+            mental: [
+              '<strong>Use quando:</strong> fizer mais sentido preservar integralmente a tabela da direita.',
+              '<strong>Boa prática:</strong> avalie se inverter a query e usar LEFT JOIN não melhora a legibilidade.',
+              '<strong>Pense assim:</strong> "a entidade importante aqui está do lado direito."'
+            ],
+            codeTitle: 'Categorias preservadas',
+            code: `<span class="kw">SELECT</span> <span class="col">cat.nome</span>, <span class="fn">COUNT</span>(<span class="col">p.id</span>) <span class="kw">AS</span> <span class="col">produtos</span><br><span class="kw">FROM</span> <span class="tbl">produtos</span> p<br><span class="kw">RIGHT JOIN</span> <span class="tbl">categorias</span> cat <span class="kw">ON</span> <span class="col">p.categoria_id</span> <span class="op">=</span> <span class="col">cat.id</span><br><span class="kw">GROUP BY</span> <span class="col">cat.nome</span>;`,
+            result: 'Mesmo categorias sem produtos aparecem no resultado, o que é útil para auditoria de catálogo.',
+            tip: 'RIGHT JOIN é válido, mas muitos times padronizam LEFT JOIN para uniformizar leitura.',
+            warning: 'Misturar LEFT e RIGHT JOIN sem critério pode deixar consultas grandes mais difíceis de entender.',
+            icon: 'rightjoin',
+            joinDiagram: `<svg viewBox="0 0 100 60" style="width: 80px; height: 48px;"><circle cx="35" cy="30" r="22" fill="none" stroke="var(--accent)" stroke-width="2"/><circle cx="65" cy="30" r="22" fill="var(--accent)" opacity="0.7" stroke="var(--accent)" stroke-width="2"/><text x="28" y="33" font-size="10" fill="var(--term-dim)" font-weight="bold">A</text><text x="67" y="33" font-size="10" fill="var(--term-white)" font-weight="bold">B</text></svg>`
+          },
+          {
+            id: '4-FULL-OUTER-JOIN',
+            name: 'FULL OUTER JOIN',
+            level: 'completo',
+            short: 'Traz tudo de ambos os lados, com ou sem correspondência.',
+            explain: 'O <strong>FULL OUTER JOIN</strong> combina o comportamento do LEFT e do RIGHT JOIN. Ele retorna todos os registros das duas tabelas, preenchendo com NULL os lados sem correspondência.',
+            mental: [
+              '<strong>Use quando:</strong> quiser enxergar todo o universo de relacionamento, inclusive faltas em ambos os lados.',
+              '<strong>Boa prática:</strong> use com objetivo analítico claro, pois o resultado pode crescer bastante.',
+              '<strong>Pense assim:</strong> "quero ver casamentos e desencontros ao mesmo tempo."'
+            ],
+            codeTitle: 'Todos os pares e ausências',
+            code: `<span class="kw">SELECT</span> <span class="col">c.nome</span>, <span class="col">p.numero_pedido</span><br><span class="kw">FROM</span> <span class="tbl">clientes</span> c<br><span class="kw">FULL OUTER JOIN</span> <span class="tbl">pedidos</span> p <span class="kw">ON</span> <span class="col">c.id</span> <span class="op">=</span> <span class="col">p.cliente_id</span><br><span class="kw">WHERE</span> <span class="col">c.id</span> <span class="kw">IS NULL</span> <span class="kw">OR</span> <span class="col">p.id</span> <span class="kw">IS NULL</span>;`,
+            result: 'A consulta ajuda a encontrar inconsistências: clientes sem pedidos e pedidos sem cliente vinculado.',
+            tip: 'Nem todo banco suporta FULL OUTER JOIN nativamente; em alguns casos será necessário simular.',
+            warning: 'Em MySQL clássico, FULL OUTER JOIN não existe nativamente — é preciso montar workaround com UNION.',
+            icon: 'fulljoin',
+            joinDiagram: `<svg viewBox="0 0 100 60" style="width: 80px; height: 48px;"><circle cx="35" cy="30" r="22" fill="var(--accent)" opacity="0.5" stroke="var(--accent)" stroke-width="2"/><circle cx="65" cy="30" r="22" fill="var(--accent)" opacity="0.5" stroke="var(--accent)" stroke-width="2"/><path d="M 47.5 15.5 A 22 22 0 0 1 47.5 44.5 A 22 22 0 0 1 47.5 15.5" fill="var(--accent)" opacity="0.8"/><text x="28" y="33" font-size="10" fill="var(--term-white)" font-weight="bold">A</text><text x="67" y="33" font-size="10" fill="var(--term-white)" font-weight="bold">B</text></svg>`
+          }
+        ]
+      }
+    ];
+
+    const realCases = [
+      {
+        id: 'case-never-bought',
+        area: 'CRM / Relacionamento',
+        title: 'Clientes que nunca compraram',
+        navDesc: 'Identificar base cadastrada que ainda não gerou nenhum pedido.',
+        headline: 'Descobrir quem entrou na base, mas ainda não converteu em venda.',
+        context: 'Imagine uma empresa com milhares de leads e clientes cadastrados no CRM. Parte dessa base já interagiu com campanhas, abriu conta ou recebeu abordagem comercial, mas ainda não fez o primeiro pedido. Sem esse recorte, o time de relacionamento trata todo mundo igual e desperdiça esforço em ações genéricas.',
+        objective: 'Encontrar clientes cadastrados que ainda não possuem nenhum pedido vinculado, criando uma lista de abordagem prioritária para conversão.',
+        reasoning: 'A lógica aqui é simples: a tabela principal é <strong>clientes</strong>, porque queremos ver toda a base cadastrada. Depois, conectamos <strong>pedidos</strong> com <strong>LEFT JOIN</strong> para preservar todos os clientes, inclusive os que não compraram. No final, filtramos apenas os casos em que o pedido não existe, ou seja, onde <strong>p.id IS NULL</strong>.',
+        query: `<span class="kw">SELECT</span> <span class="col">c.id</span>, <span class="col">c.nome</span>, <span class="col">c.email</span>, <span class="col">c.data_cadastro</span><br><span class="kw">FROM</span> <span class="tbl">clientes</span> c<br><span class="kw">LEFT JOIN</span> <span class="tbl">pedidos</span> p <span class="kw">ON</span> <span class="col">c.id</span> <span class="op">=</span> <span class="col">p.cliente_id</span><br><span class="kw">WHERE</span> <span class="col">p.id</span> <span class="kw">IS NULL</span><br><span class="kw">ORDER BY</span> <span class="col">c.data_cadastro</span> <span class="kw">DESC</span>;`,
+        expected: 'O retorno será uma lista apenas com clientes sem nenhum pedido associado. Em vez de medir vendas, a consulta mostra ausência de conversão. Isso permite separar uma base fria ou recém-captada para campanhas específicas.',
+        concepts: ['LEFT JOIN', 'ON', 'WHERE', 'IS NULL', 'ORDER BY'],
+        insight: 'Esse tipo de análise ajuda a criar réguas de ativação, campanhas de primeiro pedido e ações comerciais de recuperação. Em negócio real, isso impacta conversão e aproveitamento da base já adquirida.'
+      },
+      {
+        id: 'case-top-products',
+        area: 'Vendas / Performance',
+        title: 'Top 5 produtos mais vendidos',
+        navDesc: 'Descobrir quais itens mais performam em volume de vendas.',
+        headline: 'Encontrar os produtos que realmente puxam o volume comercial.',
+        context: 'Em um e-commerce ou operação de varejo, não basta saber que a empresa vendeu bem no mês. O time precisa entender quais produtos estão sustentando o resultado. Sem isso, fica difícil decidir estoque, destaque na vitrine, negociação com fornecedores ou investimento em mídia.',
+        objective: 'Listar os 5 produtos mais vendidos com base na soma das quantidades comercializadas.',
+        reasoning: 'A consulta parte da tabela de <strong>itens_pedido</strong>, porque é nela que mora o volume vendido por produto. Em seguida, fazemos <strong>JOIN</strong> com <strong>produtos</strong> para trazer o nome de cada item. Depois, agrupamos por produto, somamos a quantidade vendida e ordenamos do maior para o menor, limitando aos cinco primeiros.',
+        query: `<span class="kw">SELECT</span> <span class="col">pr.nome</span>, <span class="fn">SUM</span>(<span class="col">ip.quantidade</span>) <span class="kw">AS</span> <span class="col">total_vendido</span><br><span class="kw">FROM</span> <span class="tbl">itens_pedido</span> ip<br><span class="kw">INNER JOIN</span> <span class="tbl">produtos</span> pr <span class="kw">ON</span> <span class="col">ip.produto_id</span> <span class="op">=</span> <span class="col">pr.id</span><br><span class="kw">GROUP BY</span> <span class="col">pr.nome</span><br><span class="kw">ORDER BY</span> <span class="col">total_vendido</span> <span class="kw">DESC</span><br><span class="kw">LIMIT</span> <span class="num">5</span>;`,
+        expected: 'O resultado mostra uma linha por produto, acompanhada da quantidade total vendida. Os cinco primeiros representam os campeões de volume, úteis para ranking, curadoria comercial e planejamento de reposição.',
+        concepts: ['INNER JOIN', 'GROUP BY', 'SUM()', 'ORDER BY', 'LIMIT'],
+        insight: 'Esse recorte ajuda a decidir quais produtos merecem mais estoque, mais destaque no site e até mais investimento em tráfego. No mundo real, é uma consulta clássica de performance comercial.'
+      },
+      {
+        id: 'case-revenue-month',
+        area: 'Financeiro / Gestão',
+        title: 'Faturamento por mês',
+        navDesc: 'Acompanhar a evolução da receita ao longo do tempo.',
+        headline: 'Transformar vendas em uma visão clara de crescimento mensal.',
+        context: 'A área financeira e a liderança precisam enxergar se a receita está crescendo, estagnada ou caindo. Quando os dados ficam apenas no nível de pedido individual, a leitura estratégica desaparece. Agrupar por mês permite sair da operação e entrar em acompanhamento de negócio.',
+        objective: 'Calcular o faturamento mensal a partir dos pedidos pagos e acompanhar sua evolução no tempo.',
+        reasoning: 'A lógica começa filtrando apenas pedidos válidos para receita, normalmente os que estão com status <strong>pago</strong>. Depois, extraímos o mês da data do pedido, somamos o valor total e agrupamos por mês. Por fim, ordenamos em sequência para criar uma leitura temporal contínua.',
+        query: `<span class="kw">SELECT</span> <span class="fn">MONTH</span>(<span class="col">data_pedido</span>) <span class="kw">AS</span> <span class="col">mes</span>, <span class="fn">SUM</span>(<span class="col">valor_total</span>) <span class="kw">AS</span> <span class="col">faturamento</span><br><span class="kw">FROM</span> <span class="tbl">pedidos</span><br><span class="kw">WHERE</span> <span class="col">status</span> <span class="op">=</span> <span class="str">'pago'</span><br><span class="kw">GROUP BY</span> <span class="col">mes</span><br><span class="kw">ORDER BY</span> <span class="col">mes</span> <span class="kw">ASC</span>;`,
+        expected: 'O retorno terá uma linha para cada mês, com o total faturado naquele período. Isso permite comparar meses entre si, identificar sazonalidade e alimentar dashboards ou gráficos de tendência.',
+        concepts: ['WHERE', 'MONTH()', 'SUM()', 'GROUP BY', 'ORDER BY'],
+        insight: 'Essa consulta é valiosa para controle de metas, análise de sazonalidade e previsão. Em portfólio, ela mostra que você entende SQL como ferramenta de leitura gerencial, não só técnica.'
+      },
+      {
+        id: 'case-high-orders',
+        area: 'Operação / Comercial',
+        title: 'Pedidos acima de R$500',
+        navDesc: 'Monitorar pedidos de maior valor para análise prioritária.',
+        headline: 'Isolar pedidos relevantes para tratativa mais rápida e inteligente.',
+        context: 'Nem todo pedido tem o mesmo peso para a operação. Pedidos de valor mais alto podem exigir validação adicional, contato prioritário, atenção logística ou acompanhamento comercial mais próximo. Quando a equipe não enxerga esses casos rapidamente, perde eficiência e risco operacional aumenta.',
+        objective: 'Listar pedidos com valor superior a R$500 para acompanhamento prioritário.',
+        reasoning: 'Neste caso, não precisamos agrupar nem relacionar várias entidades para começar. A pergunta é direta: quais pedidos têm valor acima de determinado limite? Então partimos de <strong>pedidos</strong>, aplicamos um filtro numérico no <strong>WHERE</strong> e ordenamos do maior para o menor para destacar primeiro os pedidos mais relevantes.',
+        query: `<span class="kw">SELECT</span> <span class="col">numero_pedido</span>, <span class="col">cliente_id</span>, <span class="col">valor_total</span>, <span class="col">status</span><br><span class="kw">FROM</span> <span class="tbl">pedidos</span><br><span class="kw">WHERE</span> <span class="col">valor_total</span> <span class="op">></span> <span class="num">500</span><br><span class="kw">ORDER BY</span> <span class="col">valor_total</span> <span class="kw">DESC</span>;`,
+        expected: 'A consulta retorna apenas pedidos acima de R$500, organizados do maior para o menor. O time pode usar essa lista para monitorar aprovações, reduzir fraude, acelerar expedição ou tratar clientes de maior valor com mais atenção.',
+        concepts: ['SELECT', 'FROM', 'WHERE', 'ORDER BY'],
+        insight: 'Mesmo uma query simples pode ter alto valor de negócio quando responde a uma prioridade real. Aqui, SQL vira um filtro operacional para atenção seletiva e ganho de foco.'
+      },
+      {
+        id: 'case-ticket-average',
+        area: 'Relacionamento / Inteligência Comercial',
+        title: 'Ticket médio por cliente',
+        navDesc: 'Entender quanto cada cliente gasta em média por pedido.',
+        headline: 'Descobrir quem compra pouco, quem compra muito e quem merece tratamento diferenciado.',
+        context: 'Uma empresa pode ter muitos clientes ativos, mas isso não significa que todos geram o mesmo valor. O ticket médio por cliente ajuda a identificar perfis de consumo e a separar clientes mais estratégicos daqueles que compram com menor intensidade. Isso é útil para CRM, precificação, benefícios e retenção.',
+        objective: 'Calcular o valor médio gasto por pedido para cada cliente.',
+        reasoning: 'A pergunta mistura cliente e pedido, então precisamos juntar as duas tabelas. Depois, agrupamos por cliente e calculamos a média do <strong>valor_total</strong>. Também faz sentido contar quantos pedidos cada pessoa fez, porque uma média isolada sem contexto de volume pode enganar.',
+        query: `<span class="kw">SELECT</span> <span class="col">c.nome</span>, <span class="fn">AVG</span>(<span class="col">p.valor_total</span>) <span class="kw">AS</span> <span class="col">ticket_medio</span>, <span class="fn">COUNT</span>(<span class="col">p.id</span>) <span class="kw">AS</span> <span class="col">total_pedidos</span><br><span class="kw">FROM</span> <span class="tbl">clientes</span> c<br><span class="kw">INNER JOIN</span> <span class="tbl">pedidos</span> p <span class="kw">ON</span> <span class="col">c.id</span> <span class="op">=</span> <span class="col">p.cliente_id</span><br><span class="kw">GROUP BY</span> <span class="col">c.nome</span><br><span class="kw">ORDER BY</span> <span class="col">ticket_medio</span> <span class="kw">DESC</span>;`,
+        expected: 'Cada linha representa um cliente, acompanhada de seu ticket médio e do total de pedidos realizados. Isso permite comparar perfis de consumo e identificar quem tem maior potencial financeiro por compra.',
+        concepts: ['INNER JOIN', 'AVG()', 'COUNT()', 'GROUP BY', 'ORDER BY'],
+        insight: 'Esse caso é valioso para segmentação de clientes, campanhas VIP e análise de rentabilidade. Mostra maturidade porque conecta comportamento de compra com decisão de negócio.'
+      }
+    ];
+
+    function getIconSvg(type) {
+      const icons = {
+        database: '<svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>',
+        stack: '<svg viewBox="0 0 24 24"><path d="M12 3l9 4.5-9 4.5-9-4.5 9-4.5z"></path><path d="M3 12l9 4.5 9-4.5"></path><path d="M3 16.5L12 21l9-4.5"></path></svg>',
+        filter: '<svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>',
+        branch: '<svg viewBox="0 0 24 24"><path d="M6 3v18"></path><path d="M6 7h8a4 4 0 0 1 4 4v10"></path><path d="M6 17h8a4 4 0 0 0 4-4V3"></path></svg>',
+        list: '<svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><circle cx="4" cy="6" r="1"></circle><circle cx="4" cy="12" r="1"></circle><circle cx="4" cy="18" r="1"></circle></svg>',
+        range: '<svg viewBox="0 0 24 24"><line x1="4" y1="12" x2="20" y2="12"></line><circle cx="7" cy="12" r="3"></circle><circle cx="17" cy="12" r="3"></circle></svg>',
+        search: '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+        alert: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="13"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>',
+        sort: '<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="8 9 12 5 16 9"></polyline><polyline points="16 15 12 19 8 15"></polyline></svg>',
+        group: '<svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"></circle><circle cx="5" cy="19" r="3"></circle><circle cx="19" cy="19" r="3"></circle><line x1="12" y1="8" x2="5" y2="16"></line><line x1="12" y1="8" x2="19" y2="16"></line></svg>',
+        funnel: '<svg viewBox="0 0 24 24"><path d="M4 5h16l-6 7v5l-4 2v-7L4 5z"></path></svg>',
+        limit: '<svg viewBox="0 0 24 24"><path d="M4 12h16"></path><path d="M14 6l6 6-6 6"></path><path d="M4 6v12"></path></svg>',
+        sparkles: '<svg viewBox="0 0 24 24"><path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7L12 3z"></path><path d="M19 14l.8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8L19 14z"></path><path d="M5 14l.8 2.2L8 17l-2.2.8L5 20l-.8-2.2L2 17l2.2-.8L5 14z"></path></svg>',
+        count: '<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"></path><path d="M9 9h6v6H9z"></path></svg>',
+        sum: '<svg viewBox="0 0 24 24"><path d="M18 5H8l5 7-5 7h10"></path></svg>',
+        avg: '<svg viewBox="0 0 24 24"><path d="M4 18l5-12 5 12"></path><line x1="6" y1="14" x2="12" y2="14"></line><path d="M16 8c0-1.1.9-2 2-2s2 .9 2 2v8"></path><line x1="16" y1="12" x2="20" y2="12"></line></svg>',
+        minmax: '<svg viewBox="0 0 24 24"><path d="M7 17V7"></path><path d="M4 10l3-3 3 3"></path><path d="M17 7v10"></path><path d="M14 14l3 3 3-3"></path></svg>',
+        join: '<svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>',
+        leftjoin: '<svg viewBox="0 0 24 24"><circle cx="8" cy="12" r="5"></circle><circle cx="16" cy="12" r="5"></circle><path d="M3 12h10"></path></svg>',
+        rightjoin: '<svg viewBox="0 0 24 24"><circle cx="8" cy="12" r="5"></circle><circle cx="16" cy="12" r="5"></circle><path d="M11 12h10"></path></svg>',
+        fulljoin: '<svg viewBox="0 0 24 24"><circle cx="8" cy="12" r="5"></circle><circle cx="16" cy="12" r="5"></circle></svg>',
+        edit: '<svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>'
+      };
+      return icons[type] || icons.database;
+    }
+
+    function showToast(msg, ms = 2200) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(t._t);
+      t._t = setTimeout(() => t.classList.remove('show'), ms);
+    }
+
+    function typeText(el, text, speed = 50) {
+      let i = 0;
+      el.textContent = '';
+      function tick() {
+        if (i < text.length) {
+          el.textContent += text[i];
+          i++;
+          setTimeout(tick, speed + Math.random() * 24);
+        }
+      }
+      tick();
+    }
+
+    function initTabs() {
+      const btns = document.querySelectorAll('.tab-btn');
+      const panels = document.querySelectorAll('.panel');
+      btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tabId = btn.dataset.tab;
+          btns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          panels.forEach(p => p.classList.remove('active'));
+          document.getElementById('panel-' + tabId).classList.add('active');
+        });
+      });
+    }
+
+    function getAllIds() {
+      return modules.flatMap(module => module.items.map(item => item.id));
+    }
+
+    function loadCompleted() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        return new Set(Array.isArray(parsed) ? parsed : []);
+      } catch {
+        return new Set();
+      }
+    }
+
+    function saveCompleted() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([...completed]));
+    }
+
+    function renderRoadmap() {
+      const moduleList = document.getElementById('moduleList');
+      moduleList.innerHTML = modules.map(module => `
+        <section class="module-card">
+          <div class="module-head">
+            <div class="module-left">
+              <div class="module-index">0${module.id}</div>
+              <div>
+                <div class="module-title">${module.title}</div>
+                <div class="module-desc">${module.desc}</div>
+              </div>
+            </div>
+          </div>
+          <ul class="roadmap-list">
+            ${module.items.map(item => `
+              <li class="roadmap-item ${completed.has(item.id) ? 'completed' : ''}" data-item-id="${item.id}">
+                <div class="roadmap-icon">${getIconSvg(item.icon)}</div>
+                <div class="roadmap-content">
+                  <div class="roadmap-name">
+                    ${item.name}
+                    <span class="roadmap-badge">${item.level}</span>
+                  </div>
+                  <div class="roadmap-desc">${item.short}</div>
+                  <div class="roadmap-detail" id="detail-${item.id}">
+                    ${item.joinDiagram ? `<div class="join-diagram">${item.joinDiagram}</div>` : ''}
+                    <div class="detail-grid">
+                      <div class="detail-card">
+                        <span class="detail-label">Conceito</span>
+                        <div class="detail-text">${item.explain}</div>
+                      </div>
+                      <div class="detail-card">
+                        <span class="detail-label">Leitura mental</span>
+                        <ul class="detail-list">
+                          ${item.mental.map(line => `<li>${line}</li>`).join('')}
+                        </ul>
+                      </div>
+                    </div>
+                    <span class="detail-label">${item.codeTitle}</span>
+                    <div class="detail-code">${item.code}</div>
+                    <div class="result-box"><strong style="color:var(--term-green);">Como interpretar:</strong> ${item.result}</div>
+                    <div class="tip-box"><strong style="color:var(--accent);">Dica prática:</strong> ${item.tip}</div>
+                    <div class="warning-box"><strong style="color:var(--term-red);">Erro comum:</strong> ${item.warning}</div>
+                    <div class="study-check ${completed.has(item.id) ? 'checked' : ''}" data-study-id="${item.id}">
+                      <span class="check-box"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                      Marcar como estudado
+                    </div>
+                  </div>
+                </div>
+              </li>
+            `).join('')}
+          </ul>
+        </section>
+      `).join('');
+
+      document.querySelectorAll('.roadmap-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          if (e.target.closest('.study-check')) return;
+          const id = item.dataset.itemId;
+          const detail = document.getElementById('detail-' + id);
+          document.querySelectorAll('.roadmap-detail.open').forEach(d => {
+            if (d !== detail) d.classList.remove('open');
+          });
+          detail.classList.toggle('open');
+        });
+      });
+
+      document.querySelectorAll('.study-check').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const id = btn.dataset.studyId;
+          toggleStudy(id);
+        });
+      });
+    }
+
+    function updateProgressUI() {
+      const total = getAllIds().length;
+      const done = completed.size;
+      const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+      const badge = document.getElementById('progressBadge');
+      const fill = document.getElementById('progressFill');
+      const pctEl = document.getElementById('progressPct');
+      if (badge) badge.textContent = `progresso ${done}/${total}`;
+      if (fill) fill.style.width = pct + '%';
+      if (pctEl) pctEl.textContent = pct + '%';
+    }
+
+    function toggleStudy(id) {
+      if (completed.has(id)) {
+        completed.delete(id);
+        showToast('Conteúdo desmarcado');
+      } else {
+        completed.add(id);
+        showToast('Conteúdo marcado como estudado');
+      }
+      saveCompleted();
+      renderRoadmap();
+      updateProgressUI();
+    }
+
+    function renderCases() {
+      const nav = document.getElementById('caseNav');
+      const stack = document.getElementById('caseStudies');
+
+      nav.innerHTML = realCases.map((item, index) => `
+        <div class="case-nav-card ${index === 0 ? 'active' : ''}" data-case-nav="${item.id}">
+          <div class="case-nav-index">Caso 0${index + 1}</div>
+          <div class="case-nav-title">${item.title}</div>
+          <div class="case-nav-desc">${item.navDesc}</div>
+        </div>
+      `).join('');
+
+      stack.innerHTML = realCases.map((item, index) => `
+        <article class="case-study" id="${item.id}">
+          <div class="case-study-head">
+            <div class="case-study-left">
+              <div class="case-study-index">0${index + 1}</div>
+              <div>
+                <h3 class="case-study-title">${item.title}</h3>
+                <p class="case-study-subtitle">${item.headline}</p>
+              </div>
+            </div>
+            <span class="case-study-tag">${item.area}</span>
+          </div>
+
+          <div class="case-study-toggle">
+            <button class="case-jump-btn" data-case-toggle="${item.id}">abrir estudo de caso</button>
+          </div>
+
+          <div class="case-study-detail ${index === 0 ? 'open' : ''}" id="detail-${item.id}">
+            <div class="case-grid">
+              <div class="case-block">
+                <h4>Contexto do problema</h4>
+                <p>${item.context}</p>
+              </div>
+              <div class="case-block">
+                <h4>Objetivo da análise</h4>
+                <p>${item.objective}</p>
+              </div>
+              <div class="case-block case-block-full">
+                <h4>Como pensar</h4>
+                <p>${item.reasoning}</p>
+              </div>
+            </div>
+
+            <div class="case-query-wrap">
+              <div class="case-query-header">query sql</div>
+              <div class="case-query">${item.query}</div>
+            </div>
+
+            <div class="case-result-grid">
+              <div class="case-block">
+                <h4>Resultado esperado</h4>
+                <p>${item.expected}</p>
+              </div>
+              <div class="case-block">
+                <h4>Conceitos SQL usados</h4>
+                <div class="concept-pills">
+                  ${item.concepts.map(concept => `<span class="concept-pill">${concept}</span>`).join('')}
+                </div>
+              </div>
+            </div>
+
+            <div class="result-box"><strong style="color:var(--term-green);">Insight prático:</strong> ${item.insight}</div>
+            <div class="case-footer-note">Este caso foi escrito para iniciantes, mas com linguagem de negócio e leitura profissional, como um recorte real de operação baseada em dados.</div>
+          </div>
+        </article>
+      `).join('');
+
+      document.querySelectorAll('[data-case-toggle]').forEach(button => {
+        button.addEventListener('click', () => {
+          const id = button.dataset.caseToggle;
+          const target = document.getElementById(`detail-${id}`);
+          const isOpen = target.classList.contains('open');
+
+          document.querySelectorAll('.case-study-detail.open').forEach(detail => {
+            detail.classList.remove('open');
+          });
+
+          document.querySelectorAll('[data-case-toggle]').forEach(btn => {
+            btn.textContent = 'abrir estudo de caso';
+          });
+
+          if (!isOpen) {
+            target.classList.add('open');
+            button.textContent = 'fechar estudo de caso';
+          }
+        });
+      });
+
+      document.querySelectorAll('[data-case-nav]').forEach(card => {
+        card.addEventListener('click', () => {
+          const id = card.dataset.caseNav;
+          document.querySelectorAll('[data-case-nav]').forEach(item => item.classList.remove('active'));
+          card.classList.add('active');
+
+          const detail = document.getElementById(`detail-${id}`);
+          const toggle = document.querySelector(`[data-case-toggle="${id}"]`);
+
+          document.querySelectorAll('.case-study-detail.open').forEach(item => item.classList.remove('open'));
+          document.querySelectorAll('[data-case-toggle]').forEach(btn => {
+            btn.textContent = 'abrir estudo de caso';
+          });
+
+          if (detail) detail.classList.add('open');
+          if (toggle) toggle.textContent = 'fechar estudo de caso';
+
+          const section = document.getElementById(id);
+          if (section) section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+      });
+    }
+
+    let completed = loadCompleted();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initTabs();
+      renderRoadmap();
+      renderCases();
+      updateProgressUI();
+      typeText(document.getElementById('typedText'), 'cat fundamentos-sql-glass.md', 45);
+
+      document.getElementById('resetBtn').addEventListener('click', () => {
+        if (confirm('Resetar todo o progresso?')) {
+          completed = new Set();
+          saveCompleted();
+          renderRoadmap();
+          updateProgressUI();
+          showToast('Progresso resetado');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
