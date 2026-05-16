@@ -2,7 +2,7 @@
 
 > Roadmap interativo e visual para quem está começando com SQL. Aprenda os fundamentos na prática, com exemplos reais de negócio.
 
-🔗 **[Acesse o projeto ao vivo aqui](https://ezequeigomes10.github.io/sql-roadmap/)**
+🔗 **[Acesse o projeto ao vivo aqui](https://ezequielgomes10.github.io/sql-roadmap/)** 
 
 ---
 
